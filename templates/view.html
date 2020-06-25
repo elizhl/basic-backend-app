@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <main class="main-content col-lg-10 col-md-9 col-sm-12 p-0 offset-lg-1 offset-md-1">
+          <!-- Page Header -->
+          <div class="page-header row no-gutters py-4 mb-3 border-bottom">
+            <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
+              <span class="text-uppercase page-subtitle">Backend App</span>
+            </div>
+            <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
+              <div class="custom-control custom-toggle custom-toggle-sm mb-1" style="margin-left: 44% !important">
+                <input type="checkbox" id="version" name="version" class="custom-control-input">
+                <label class="custom-control-label" for="version"></label>v2
+              </div>
+            </div>
+          </div>
+          <!-- End Page Header -->
+          <div class="row">
+            <div class="col-lg-12 mb-4">
+              <div class="card card-small mb-4">
+                <div class="card-header border-bottom">
+                  <h6 class="m-0">Send ticket request</h6>
+                </div>
+                <div class="card-body p-0 pb-3 text-center">
+                  <table class="table mb-0">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span class="mt-1">
+                            <input type="text" class="form-control form-control-sm" id="name" placeholder="Name">
+                          </span>
+                        </td>
+                        <td>
+                          <div class="input-group">
+                            <input type="email" class="form-control form-control-sm" id="email" placeholder="Email">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" id="reason" placeholder="Reason">
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <button type="button" class="mb-2 btn btn-success mr-2" onclick="saveConfig()">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div> 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+  function saveConfig() {
+    var name = document.getElementById("name").value
+    var email = document.getElementById("email").value
+    var reason = document.getElementById("reason").value
+    var version = document.getElementById("version").checked
+  
+    var info = {
+      "name": name,
+      "email": email,
+      "reason": reason,
+      "version": version
+    }
+
+    $.ajax({
+        data: info,
+        type: 'POST',
+        url: '/save-ticket'
+    }).done(function(data, textStatus, jqXHR) {
+      console.log(data)
+      if(data.email) {
+        swal("Done!", data.name + " an email has been sent to you.", "success")
+      } else {
+        swal("Done!", data.name + " your ticket has been saved. No: " + data.folio, "success")
+      }
+      
+    });
+  }
+</script>
+{% endblock %}
