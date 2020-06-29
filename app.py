@@ -13,6 +13,10 @@ app = Flask(__name__)
 def index():
     return render_template('view.html')
 
+@app.route('/health', methods=['POST'])
+def health_check():
+	return True
+
 @app.route('/save-ticket', methods=['POST'])
 def save_config():
     info = request.form
