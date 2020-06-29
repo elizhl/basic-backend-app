@@ -15,7 +15,7 @@ def index():
 
 @app.route('/health', methods=['POST'])
 def health_check():
-	return True
+	return {"success": True}
 
 @app.route('/save-ticket', methods=['POST'])
 def save_config():
