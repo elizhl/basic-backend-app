@@ -8,12 +8,12 @@
             <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
               <span class="text-uppercase page-subtitle">Backend App</span>
             </div>
-            <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
+            <!-- <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
               <div class="custom-control custom-toggle custom-toggle-sm mb-1" style="margin-left: 44% !important">
                 <input type="checkbox" id="version" name="version" class="custom-control-input">
                 <label class="custom-control-label" for="version"></label>v2
               </div>
-            </div>
+            </div> -->
           </div>
           <!-- End Page Header -->
           <div class="row">
@@ -63,13 +63,11 @@
     var name = document.getElementById("name").value
     var email = document.getElementById("email").value
     var reason = document.getElementById("reason").value
-    var version = document.getElementById("version").checked
   
     var info = {
       "name": name,
       "email": email,
       "reason": reason,
-      "version": version
     }
 
     $.ajax({

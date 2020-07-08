@@ -5,6 +5,8 @@ import uuid
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import json
+import requests
 
 app = Flask(__name__)
 
@@ -22,7 +24,13 @@ def save_config():
     info = request.form
 
     folio = str(uuid.uuid4()).split("-")[0]
-    version = True if info['version'] == "true" else False
+
+    with open('/etc/toggles.json') as f:
+        d = json.load(f)
+
+        kv_value = d.get('toggles', {}).get('toggle_1', False)
+
+    version = kv_value
 
     if not version:
         return {
@@ -34,7 +42,9 @@ def save_config():
     
     else:
 
-        send_email(info.get('email', ""), folio)
+        data = {'email': info.get('email', "")}
+
+        r = requests.post('http://172.20.20.22:8000/send-notification', data=data)
 
         return {
             'success': True, 
@@ -42,27 +52,6 @@ def save_config():
             'folio': folio,
             'email': True
         }
-
-def send_email(email, folio):
-    me = "consultraining.eli@gmail.com"
-    my_password = "Nothing."
-    you = email
-
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = "Hi there"
-    msg['From'] = me
-    msg['To'] = you
-
-    html = '<html><body><p>Your request has been received. Your folio is '+ folio +'</p></body></html>'
-    part2 = MIMEText(html, 'html')
-
-    msg.attach(part2)
-
-    s = smtplib.SMTP_SSL('smtp.gmail.com')
-    
-    s.login(me, my_password)
-    s.sendmail(me, you, msg.as_string())
-    s.quit()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
